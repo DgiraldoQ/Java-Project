@@ -10,4 +10,4 @@ Empleados (en el caso de cuentas empresariales)
 
 Reportes mensuales y balances financieros
 
-La aplicación fue diseñada y desarrollada por [Tu nombre] en conjunto con Julieth Castro Herrera, trabajando en equipo la estructura lógica del sistema, la implementación de clases, y la creación de un modelo de base de datos en MySQL para almacenar la información de los usuarios, cuentas y transacciones.
+La aplicación fue diseñada y desarrollada por Diego Armando Giraldo Quintero en conjunto con Julieth Castro Herrera, trabajando en equipo la estructura lógica del sistema, la implementación de clases, y la creación de un modelo de base de datos en MySQL para almacenar la información de los usuarios, cuentas y transacciones.
