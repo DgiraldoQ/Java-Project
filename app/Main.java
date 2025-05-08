@@ -86,7 +86,7 @@ public class Main {
         CuentaPersonal nuevaCuenta = new CuentaPersonal(
                 "Luis Torres", "CP789", BigDecimal.valueOf(30000), BigDecimal.valueOf(15));
 
-        gestor.registrarCuenta(nuevaCuenta)
+        gestor.registrarCuenta(nuevaCuenta);
 
         System.out.println("Nueva cuenta registrada. Total de cuentas del gestor: " + gestor.getCuentas().size());
 
