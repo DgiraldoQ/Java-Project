@@ -1,5 +1,5 @@
-package util;
+package com.sistemafinanciero.util;
 
-public enum TipoTransaccion{
+public enum TipoTransaccion {
     INGRESO, GASTO;
 }
