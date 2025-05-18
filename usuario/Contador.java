@@ -1,40 +1,30 @@
-package usuario;
+package com.sistemafinanciero.usuario;
 
-import modelo.Cuenta;
+import com.sistemafinanciero.modelo.Cuenta;
 
 import java.util.List;
 
 public class Contador extends Usuario {
     private String numTarjetaProfesional;
 
-    // Constructor
-    public Contador(int idUsuario, String nombre, String correo, String contrasena, String rol, 
+    public Contador(int idUsuario, String nombre, String correo, String contrasena, String rol,
                     List<Cuenta> cuentas, String numTarjetaProfesional) {
         super(idUsuario, nombre, correo, contrasena, rol, cuentas);
         this.numTarjetaProfesional = numTarjetaProfesional;
     }
 
-    // Métodos
     public String generarReporteMensual() {
-        return "Generando reporte mensual del contador...";
+        return "Reporte mensual generado por contador.";
     }
 
     public void auditarCuentas() {
-        System.out.println("Auditando cuentas...");
+        System.out.println("Cuentas auditadas correctamente.");
     }
 
-    public boolean exportarInforme() {
-        System.out.println("Exportando informe del contador...");
+    public boolean exportarInformes() {
+        System.out.println("Informes exportados por contador.");
         return true;
     }
 
-    // Getters y Setters
-    public String getNumTarjetaProfesional() {
-        return numTarjetaProfesional;
-    }
-
-    public void setNumTarjetaProfesional(String numTarjetaProfesional) {
-        this.numTarjetaProfesional = numTarjetaProfesional;
-    }
+    public String getNumTarjetaProfesional() { return numTarjetaProfesional; }
 }
-
