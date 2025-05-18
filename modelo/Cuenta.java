@@ -1,71 +1,58 @@
-package modelo;
+package com.sistemafinanciero.modelo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Cuenta {
-    private String titular;
-    private String idCuenta;
-    private BigDecimal saldo;
-    private List<Transaccion> transacciones;
+    protected String titular;
+    protected String idCuenta;
+    protected BigDecimal saldo;
+    protected List<Transaccion> transacciones;
 
-    // Constructor
     public Cuenta(String titular, String idCuenta, BigDecimal saldo) {
         this.titular = titular;
         this.idCuenta = idCuenta;
-        this.saldo = saldo != null ? saldo : BigDecimal.ZERO; // Manejo de saldo nulo
+        this.saldo = saldo != null ? saldo : BigDecimal.ZERO;
         this.transacciones = new ArrayList<>();
     }
 
-    // Métodos principales
-    public void agregarTransaccion(Transaccion transaccion) {
-        if (transaccion != null) {
-            transacciones.add(transaccion);
-            saldo = saldo.add(transaccion.getMonto()); // Actualizar saldo
+    public void agregarTransaccion(Transaccion t) {
+        if (t != null) {
+            transacciones.add(t);
+            saldo = saldo.add(t.getMonto());
         }
+    }
+
+    public void eliminarTransaccion(Transaccion t) {
+        if (transacciones.remove(t)) {
+            saldo = saldo.subtract(t.getMonto());
+        }
+    }
+
+    public abstract BigDecimal calcularTotalIngresos();
+    public abstract BigDecimal calcularTotalGastos();
+
+    public Transaccion buscarTransaccion(String id) {
+        for (Transaccion t : transacciones) {
+            if (t.getIdTransaccion().equals(id)) return t;
+        }
+        return null;
     }
 
     public BigDecimal obtenerBalance() {
         return saldo;
     }
 
-    public abstract BigDecimal calcularTotalIngresos();
-    public abstract BigDecimal calcularTotalGastos();
+    // Getters y setters
+    public String getTitular() { return titular; }
+    public void setTitular(String titular) { this.titular = titular; }
 
-    // Getters y Setters
-    public String getTitular() {
-        return titular;
-    }
+    public String getIdCuenta() { return idCuenta; }
+    public void setIdCuenta(String idCuenta) { this.idCuenta = idCuenta; }
 
-    public void setTitular(String titular) {
-        this.titular = titular;
-    }
+    public BigDecimal getSaldo() { return saldo; }
+    public void setSaldo(BigDecimal saldo) { this.saldo = saldo; }
 
-    public String getIdCuenta() {
-        return idCuenta;
-    }
-
-    public void setIdCuenta(String idCuenta) {
-        this.idCuenta = idCuenta;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo != null ? saldo : BigDecimal.ZERO;
-    }
-
-    public List<Transaccion> getTransacciones() {
-        return transacciones;
-    }
-
-    public void setTransacciones(List<Transaccion> transacciones) {
-        if (transacciones != null) {
-            this.transacciones = transacciones;
-        }
-    }
+    public List<Transaccion> getTransacciones() { return transacciones; }
 }
-

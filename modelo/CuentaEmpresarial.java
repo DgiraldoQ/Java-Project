@@ -1,4 +1,4 @@
-package modelo;
+package com.sistemafinanciero.modelo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -9,64 +9,55 @@ public class CuentaEmpresarial extends Cuenta {
     private List<Empleado> empleados;
     private BigDecimal tasaIVA;
 
-    // Constructor
     public CuentaEmpresarial(String titular, String idCuenta, BigDecimal saldo, String nombreEmpresa, BigDecimal tasaIVA) {
         super(titular, idCuenta, saldo);
         this.nombreEmpresa = nombreEmpresa;
-        this.tasaIVA = tasaIVA != null ? tasaIVA : BigDecimal.ZERO;
+        this.tasaIVA = tasaIVA;
         this.empleados = new ArrayList<>();
     }
 
     @Override
     public BigDecimal calcularTotalIngresos() {
-        BigDecimal totalIngresos = BigDecimal.ZERO;
-        for (Transaccion transaccion : getTransacciones()) {
-            if (transaccion.getCategoria().equalsIgnoreCase("Ingreso")) {
-                totalIngresos = totalIngresos.add(transaccion.getMonto());
-            }
-        }
-        return totalIngresos;
+        return getTransacciones().stream()
+            .filter(Transaccion::esIngreso)
+            .map(Transaccion::getMonto)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
     public BigDecimal calcularTotalGastos() {
-        BigDecimal totalGastos = BigDecimal.ZERO;
-        for (Transaccion transaccion : getTransacciones()) {
-            if (transaccion.getCategoria().equalsIgnoreCase("Gasto")) {
-                totalGastos = totalGastos.add(transaccion.getMonto());
-            }
-        }
-        return totalGastos;
+        return getTransacciones().stream()
+            .filter(t -> !t.esIngreso())
+            .map(Transaccion::getMonto)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    @Override
-    public BigDecimal obtenerBalance() {
-        return getSaldo().subtract(getSaldo().multiply(tasaIVA.divide(BigDecimal.valueOf(100))));
+    public BigDecimal calcularIVA() {
+        return saldo.multiply(tasaIVA.divide(BigDecimal.valueOf(100)));
     }
 
-    // Getters y Setters
-    public String getNombreEmpresa() {
-        return nombreEmpresa;
+    public BigDecimal calcularNomina() {
+        return empleados.stream()
+            .map(Empleado::getSalario)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public void setNombreEmpresa(String nombreEmpresa) {
-        this.nombreEmpresa = nombreEmpresa;
+    public BigDecimal calcularDeducciones() {
+        return calcularTotalGastos().add(calcularIVA());
     }
 
-    public List<Empleado> getEmpleados() {
-        return empleados;
+    public String generarEstadoFinanciero() {
+        return "Ingresos: " + calcularTotalIngresos() + ", Gastos: " + calcularTotalGastos();
     }
 
-    public void setEmpleados(List<Empleado> empleados) {
-        this.empleados = empleados != null ? empleados : new ArrayList<>();
+    public String generarBalanceGeneral() {
+        return "Saldo disponible con IVA: " + obtenerBalance();
     }
 
-    public BigDecimal getTasaIVA() {
-        return tasaIVA;
-    }
-
-    public void setTasaIVA(BigDecimal tasaIVA) {
-        this.tasaIVA = tasaIVA != null ? tasaIVA : BigDecimal.ZERO;
-    }
+    // Getters y setters
+    public String getNombreEmpresa() { return nombreEmpresa; }
+    public List<Empleado> getEmpleados() { return empleados; }
+    public void setEmpleados(List<Empleado> empleados) { this.empleados = empleados; }
+    public BigDecimal getTasaIVA() { return tasaIVA; }
+    public void setTasaIVA(BigDecimal tasaIVA) { this.tasaIVA = tasaIVA; }
 }
-
