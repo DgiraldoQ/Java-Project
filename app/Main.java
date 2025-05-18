@@ -1,95 +1,97 @@
-package app;
+package com.sistemafinanciero.app;
 
-import modelo.*;
-import usuario.*;
-import util.*;
+import com.sistemafinanciero.modelo.*;
+import com.sistemafinanciero.usuario.*;
+import com.sistemafinanciero.reporte.*;
+import com.sistemafinanciero.util.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Main {
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
+
     public static void main(String[] args) {
-        // Crear cuentas
+        logger.info("===== SISTEMA CONTABLE - DEMO PRINCIPAL =====");
+
+        // Cuentas
         CuentaPersonal cuentaPersonal = new CuentaPersonal(
-                "Juan Pérez", "CP123", BigDecimal.valueOf(15000), BigDecimal.valueOf(10));
+                "Juan Pérez", "CP001", new BigDecimal("15000.00"), new BigDecimal("10"));
 
         CuentaEmpresarial cuentaEmpresarial = new CuentaEmpresarial(
-                "Ana Gómez", "CE456", BigDecimal.valueOf(100000), "TechCorp", BigDecimal.valueOf(16));
+                "Ana Gómez", "CE001", new BigDecimal("100000.00"), "TechCorp", new BigDecimal("16"));
 
-        // Crear transacciones
+        // Transacciones
         Transaccion ingreso1 = new Transaccion(
-                "T001", "Ingreso", MetodoPago.EFECTIVO, BigDecimal.valueOf(5000),
-                TipoTransaccion.INGRESO, new Date(), "Pago freelance");
+                "T001", "Ingreso", MetodoPago.EFECTIVO, new BigDecimal("5000.00"),
+                TipoTransaccion.INGRESO, new Date(), "Venta producto A");
 
         Transaccion gasto1 = new Transaccion(
-                "T002", "Gasto", MetodoPago.TARJETA, BigDecimal.valueOf(2000),
-                TipoTransaccion.GASTO, new Date(), "Compra de suministros");
+                "T002", "Gasto", MetodoPago.TARJETA, new BigDecimal("2000.00"),
+                TipoTransaccion.GASTO, new Date(), "Compra insumos");
 
-        // Agregar transacciones a las cuentas
+        Transaccion ingresoEmp = new Transaccion(
+                "T003", "Ingreso", MetodoPago.TRANSFERENCIA, new BigDecimal("20000.00"),
+                TipoTransaccion.INGRESO, new Date(), "Proyecto X");
+
+        Transaccion gastoEmp = new Transaccion(
+                "T004", "Gasto", MetodoPago.PAYPAL, new BigDecimal("8000.00"),
+                TipoTransaccion.GASTO, new Date(), "Publicidad");
+
+        // Asociar transacciones a cuentas
         cuentaPersonal.agregarTransaccion(ingreso1);
         cuentaPersonal.agregarTransaccion(gasto1);
 
-        cuentaEmpresarial.agregarTransaccion(new Transaccion(
-                "T003", "Ingreso", MetodoPago.TRANSFERENCIA, BigDecimal.valueOf(15000),
-                TipoTransaccion.INGRESO, new Date(), "Pago cliente X"));
+        cuentaEmpresarial.agregarTransaccion(ingresoEmp);
+        cuentaEmpresarial.agregarTransaccion(gastoEmp);
 
-        cuentaEmpresarial.agregarTransaccion(new Transaccion(
-                "T004", "Gasto", MetodoPago.PAYPAL, BigDecimal.valueOf(8000),
-                TipoTransaccion.GASTO, new Date(), "Publicidad"));
-
-        // Crear usuarios
+        // Usuario básico
         List<Cuenta> cuentasUsuario1 = new ArrayList<>();
         cuentasUsuario1.add(cuentaPersonal);
 
         Usuario usuario1 = new Usuario(
-                1, "Juan Pérez", "juan.perez@mail.com", "password123", "usuario", cuentasUsuario1);
+                1, "Juan Pérez", "juan@mail.com", "1234", "usuario", cuentasUsuario1);
+        usuario1.iniciarSesion("juan@mail.com", "1234");
 
-        List<Cuenta> cuentasUsuario2 = new ArrayList<>();
-        cuentasUsuario2.add(cuentaEmpresarial);
+        // Administrador
+        List<Cuenta> cuentasAdmin = new ArrayList<>();
+        cuentasAdmin.add(cuentaEmpresarial);
 
         Administrador admin = new Administrador(
-                2, "Admin1", "admin@mail.com", "adminpass", "admin", cuentasUsuario2,
+                2, "Admin", "admin@mail.com", "adminpass", "admin", cuentasAdmin,
                 List.of("GESTIONAR_USUARIOS", "GESTIONAR_CUENTAS"));
 
-        Contador contador = new Contador(
-                3, "Carlos Ramírez", "carlos@mail.com", "contador123", "contador", cuentasUsuario2,
-                "TP123456");
-
-        // Flujo principal
-        System.out.println("==== SISTEMA DE GESTIÓN FINANCIERA ====");
-        
-        // Inicio de sesión (simulado)
-        usuario1.iniciarSesion("juan.perez@mail.com", "password123");
-
-        // Consultar balance de la cuenta personal
-        System.out.println("Balance de la cuenta personal de " + usuario1.getNombre() + ": "
-                + cuentaPersonal.obtenerBalance());
-
-        // Generar reporte del contador
-        System.out.println(contador.generarReporteMensual());
-        contador.auditarCuentas();
-
-        // Administrador gestiona usuarios
         admin.administrarUsuarios();
-        admin.verificarEstadosSistema();
+        logger.info(admin.verEstadisticasSistema());
 
-        // Consultar balance total del gestor empresarial
+        // Contador
+        Contador contador = new Contador(
+                3, "Carlos", "carlos@mail.com", "1234", "contador", cuentasAdmin, "TP123456");
+
+        logger.info(contador.generarReporteMensual());
+        contador.auditarCuentas();
+        contador.exportarInformes();
+
+        // Gestor empresarial
         GestorEmpresarial gestor = new GestorEmpresarial(
-                4, "Luis Torres", "luis@mail.com", "gestor123", "gestor",
-                cuentasUsuario2, "StartupTech");
+                4, "Laura", "laura@mail.com", "1234", "gestor", cuentasAdmin, "EmprendimientoX");
 
-        System.out.println("Balance total del emprendimiento: " + gestor.consultarBalance());
+        gestor.registrarCuenta(new CuentaPersonal("Laura", "CP002", new BigDecimal("12000"), new BigDecimal("12")));
+        logger.info("Balance total del gestor: " + gestor.consultarBalance());
 
-        // Registrar nueva cuenta para el gestor empresarial
-        CuentaPersonal nuevaCuenta = new CuentaPersonal(
-                "Luis Torres", "CP789", BigDecimal.valueOf(30000), BigDecimal.valueOf(15));
+        // Verificar alertas y cálculos
+        logger.info("¿Cuenta personal con exceso de gastos?: " + cuentaPersonal.alertarExcesoGastos());
+        logger.info("Impuestos aplicables a cuenta personal: " + cuentaPersonal.calcularImpuestos());
 
-        gestor.registrarCuenta(nuevaCuenta);
+        // Reporte de balance
+        ReporteBalanceGeneral reporte = new ReporteBalanceGeneral();
+        reporte.agregarTransaccion(ingreso1);
+        reporte.agregarTransaccion(gasto1);
+        logger.info(reporte.generarBalanceGeneral());
 
-        System.out.println("Nueva cuenta registrada. Total de cuentas del gestor: " + gestor.getCuentas().size());
-
-        System.out.println("==== FIN DEL SISTEMA ====");
+        logger.info("===== FIN DEL SISTEMA =====");
     }
 }
