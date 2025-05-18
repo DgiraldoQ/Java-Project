@@ -1,16 +1,7 @@
-package reporte;
-
-import java.util.List;
-
-import modelo.Transaccion;
+package com.sistemafinanciero.reporte;
 
 public class ReporteAnual extends Reporte {
     public String generarResumenAnual() {
-        return "Resumen anual";
-    }
-
-    public void setTransacciones(List<Transaccion> transacciones) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setTransacciones'");
+        return "Resumen anual generado.";
     }
 }
