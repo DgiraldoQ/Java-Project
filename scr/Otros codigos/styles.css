@@ -1,0 +1,36 @@
+/* Estilo para el título principal */
+.label-titulo-principal {
+    -fx-font-size: 24px;          /* estándar CSS */
+    font-size: 24px;      /* JavaFX */
+    -fx-font-weight: bold;        /* estándar CSS */
+    font-weight: bold;    /* JavaFX */
+}
+
+/* Estilo para las etiquetas de sección */
+.label-seccion {
+    -fx-font-size: 18px;          /* estándar CSS */
+    font-size: 18px;      /* JavaFX */
+}
+
+/* Estilo para los botones */
+.button {
+    -fx-font-size: 14px;
+    font-size: 14px;
+    padding: 6px 12px;
+}
+
+/* Estilo para los TextField */
+.text-field {
+    -fx-font-size: 14px;
+    font-size: 14px;
+}
+
+/* Contenedores VBox e HBox con padding y espaciado */
+.vbox {
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+}
+
+.hbox {
+    -fx-spacing: 15px;
+}

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.sistemafinanciero.controller.JavaFXController" spacing="20" style="-fx-padding: 20;">
+
+    <!-- Cabecera -->
+    <HBox alignment="CENTER" spacing="20">
+        <Label text="Sistema Financiero" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- Sección de Usuarios -->
+    <VBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Gestión de Usuarios" style="-fx-font-size: 18px;"/>
+
+        <!-- Campos de Usuario -->
+        <HBox spacing="10">
+            <TextField fx:id="userNameField" promptText="Nombre" />
+            <TextField fx:id="userLastNameField" promptText="Apellido" />
+            <TextField fx:id="userRutField" promptText="RUT o CC" />
+        </HBox>
+
+        <HBox spacing="10">
+            <ComboBox fx:id="accountTypeComboBox" promptText="Tipo de Cuenta" />
+            <ComboBox fx:id="userRoleComboBox" promptText="Rol" />
+            <TextField fx:id="companyNameField" promptText="Nombre Empresa (opcional)" />
+        </HBox>
+
+        <!-- Botones de acciones -->
+        <HBox spacing="10">
+            <Button text="Crear Usuario" onAction="#createUser" />
+            <Button text="Eliminar Usuario" onAction="#deleteUser" />
+        </HBox>
+
+        <!-- Tabla de Usuarios -->
+        <TableView fx:id="userTableView" prefHeight="200" onMouseClicked="#selectUser">
+            <TableColumn fx:id="userNameColumn" text="Nombre" prefWidth="200" />
+            <TableColumn fx:id="userAccountTypeColumn" text="Tipo de Cuenta" prefWidth="200" />
+            <TableColumn fx:id="userRutColumn" text="RUT" prefWidth="200" />
+        </TableView>
+    </VBox>
+
+    <!-- Sección de Empleados -->
+    <VBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Gestión de Empleados" style="-fx-font-size: 18px;"/>
+
+        <!-- Campos de Empleado -->
+        <HBox spacing="10">
+            <TextField fx:id="employeeNameField" promptText="Nombre" />
+            <TextField fx:id="employeeLastNameField" promptText="Apellido" />
+            <TextField fx:id="employeePositionField" promptText="Puesto" />
+            <TextField fx:id="employeeSalaryField" promptText="Sueldo" />
+        </HBox>
+
+        <!-- Botones de acciones -->
+        <HBox spacing="10">
+            <Button text="Crear Empleado" onAction="#createEmployee" />
+            <Button text="Eliminar Empleado" onAction="#deleteEmployee" />
+        </HBox>
+
+        <!-- Tabla de Empleados -->
+        <TableView fx:id="employeeTableView" prefHeight="200">
+            <TableColumn fx:id="employeeNameColumn" text="Nombre" prefWidth="150" />
+            <TableColumn fx:id="employeePositionColumn" text="Puesto" prefWidth="150" />
+            <TableColumn fx:id="employeeSalaryColumn" text="Sueldo" prefWidth="150" />
+            <TableColumn fx:id="employeeCompanyColumn" text="Empresa" prefWidth="150" />
+        </TableView>
+    </VBox>
+
+    <!-- Sección de Transacciones -->
+    <VBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Gestión de Transacciones" style="-fx-font-size: 18px;"/>
+
+        <!-- Campos de Transacción -->
+        <HBox spacing="10">
+            <ComboBox fx:id="transactionTypeComboBox" promptText="Tipo de Transacción" />
+            <TextField fx:id="transactionAmountField" promptText="Monto" />
+            <TextField fx:id="transactionReasonField" promptText="Motivo" />
+        </HBox>
+
+        <!-- Botones de acciones -->
+        <HBox spacing="10">
+            <Button text="Crear Transacción" onAction="#createTransaction" />
+            <Button text="Eliminar Transacción" onAction="#deleteTransaction" />
+        </HBox>
+
+        <!-- Tabla de Transacciones -->
+        <TableView fx:id="transactionTableView" prefHeight="200">
+            <TableColumn fx:id="transactionTypeColumn" text="Tipo" prefWidth="150" />
+            <TableColumn fx:id="transactionAmountColumn" text="Monto" prefWidth="150" />
+            <TableColumn fx:id="transactionReasonColumn" text="Motivo" prefWidth="200" />
+            <TableColumn fx:id="transactionUserColumn" text="Usuario/Empresa" prefWidth="200" />
+        </TableView>
+    </VBox>
+
+</VBox>
